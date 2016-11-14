@@ -1,0 +1,8 @@
+C:\Users\Steven\Documents\Visual Studio 2005\Projects\Chess\Chess\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Steven\Documents\Visual Studio 2005\Projects\Chess\Chess\obj\Debug\Chess.Form1.resources
+C:\Users\Steven\Documents\Visual Studio 2005\Projects\Chess\Chess\obj\Debug\Chess.Properties.Resources.resources
+C:\Users\Steven\Documents\Visual Studio 2005\Projects\Chess\Chess\obj\Debug\Chess.csproj.GenerateResource.Cache
+C:\Users\Steven\Documents\Visual Studio 2005\Projects\Chess\Chess\bin\Debug\Chess.exe
+C:\Users\Steven\Documents\Visual Studio 2005\Projects\Chess\Chess\bin\Debug\Chess.pdb
+C:\Users\Steven\Documents\Visual Studio 2005\Projects\Chess\Chess\obj\Debug\Chess.exe
+C:\Users\Steven\Documents\Visual Studio 2005\Projects\Chess\Chess\obj\Debug\Chess.pdb

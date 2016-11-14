@@ -1,0 +1,227 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{26B783AC-CD28-4169-81A0-ADFB2D83AC74}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Chess</RootNamespace>
+    <AssemblyName>Chess</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ChessPiece.cs" />
+    <Compile Include="Networking\RichtextboxExtensions.cs" />
+    <Compile Include="Networking\Client.cs" />
+    <Compile Include="Networking\NetworkingWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Networking\NetworkingWindow.Designer.cs">
+      <DependentUpon>NetworkingWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainChessWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainChessWindow.Designer.cs">
+      <DependentUpon>MainChessWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gameplay.cs" />
+    <Compile Include="ChessClockWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChessClockWindow.Designer.cs">
+      <DependentUpon>ChessClockWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Networking\Server.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Networking\NetworkingWindow.resx">
+      <DependentUpon>NetworkingWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainChessWindow.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MainChessWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ChessClockWindow.resx">
+      <DependentUpon>ChessClockWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chess Piece Images\Black%2860percent%29.jpg" />
+    <None Include="Chess Piece Images\White King %2860percent%29.jpg" />
+    <None Include="Chess Piece Images\White%2860percent%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chess Piece Images\White King %28W60percent%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chess Piece Images\White Queen %28W60percent%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chess Piece Images\White Queen %2860percent%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chess Piece Images\White Bishop %28W60percent%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chess Piece Images\White Bishop %2860percent%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chess Piece Images\White Knight %2860percent%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chess Piece Images\White Knight %28W60percent%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chess Piece Images\White Rook %28W60percent%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chess Piece Images\White Rook %2860percent%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chess Piece Images\White Pawn %28W60percent%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chess Piece Images\White Pawn %2860percent%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chess Piece Images\Black Rook %28W60percent%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chess Piece Images\Black Bishop %2860percent%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chess Piece Images\Black Bishop %28W60percent%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chess Piece Images\Black King %2860percent%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chess Piece Images\Black King %28W60percent%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chess Piece Images\Black Knight %2860percent%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chess Piece Images\Black Knight %28W60percent%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chess Piece Images\Black Pawn %2860percent%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chess Piece Images\Black Pawn %28W60percent%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chess Piece Images\Black Queen%2860percent%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chess Piece Images\Black Queen%28W60percent%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chess Piece Images\Black Rook %2860percent%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Chess Piece Images\Blue %2860percent%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Chess Piece Images\Orange %2860percent%29.jpg" />
+    <None Include="Resources\Orange.jpg" />
+    <None Include="Resources\Orange.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
