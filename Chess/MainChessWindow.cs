@@ -74,15 +74,7 @@ namespace Chess
             dgv_chessBoard.Rows.Add(MAX_CHESS_SQUARES);
             squareIsWhite = new bool[MAX_CHESS_SQUARES, MAX_CHESS_SQUARES];
 
-
-            //create the logical chessboard
-            chessBoard = ChessPiece.CreateChessBoard();
-
-            //set the first player based on user input
-            currentGame.Turn = firstPlayerColour;
-
-            DrawCheckeredPattern();
-            updateDisplay();
+            newGame();
 
             isNetworked = false;    //by default, person is just playing with themselves
         }
@@ -92,6 +84,12 @@ namespace Chess
         {
             //Reset game
             currentGame.reset();
+
+            //set the first player based on user input
+            currentGame.Turn = firstPlayerColour;
+
+            //Create New Logical chessboard
+            chessBoard = ChessPiece.CreateChessBoard();
 
             //Display Board
             DrawCheckeredPattern();
@@ -180,13 +178,20 @@ namespace Chess
             //You can't move a piece if it doesn't exist
             if (selectedType != chessPieces.CLEAR)
             {
-                //Variables to correct display after enPassent move
+                //Variables to update display after enPassent move
                 bool enPassant = false ;
                 Pawn enPassantPawn = null ;
-                if (ChessPiece.DblMovePawn != null)
+                if (ChessPiece.DblMovePawn != null && chessBoard[oldCol, oldRow].Type() == chessPieces.PAWN)
                 {
                     enPassant = ChessPiece.isEnPassant(oldCol, oldRow, newCol, newRow, chessBoard);
                     enPassantPawn = (Pawn)(ChessPiece.DblMovePawn).Clone();
+                }
+
+                //Variables to update display after castling move
+                bool castling = false;
+                if (chessBoard[oldCol, oldRow].CanCastle && chessBoard[newCol, newRow].CanCastle)
+                {
+                    castling = ChessPiece.isCastling(chessBoard[oldCol, oldRow], chessBoard[newCol, newRow], chessBoard);
                 }
 
                 //move the piece
@@ -195,16 +200,28 @@ namespace Chess
                 //Every time a valid move is made, switch turns
                 currentGame.changeTurns();
 
-                //DISPLAY - Update only the piece that just moved:
-                displayPieceAt(newCol, newRow, selectedType, selectedColour);
-
-                //DISPLAY - Special case: If the move was enPassent, update the possible pawn locations (+/- one from the pawn that just moved
-                if (enPassant)
+                //DISPLAY - Special case: If we are castling, just update the whole row that the king is on
+                if (castling)
                 {
-                    displayPieceAt( enPassantPawn.PositionX, 
-                                    enPassantPawn.PositionY, 
-                                    chessBoard[enPassantPawn.PositionX, enPassantPawn.PositionY].Type(),
-                                    chessBoard[enPassantPawn.PositionX, enPassantPawn.PositionY].Colour);
+                    for (int i = 0; i < MAX_CHESS_SQUARES; i++)
+                    {
+                        displayPieceAt(i, newRow, chessBoard[i, newRow].Type(), chessBoard[i, newRow].Colour);
+                        updateSelectionSquare();
+                    }
+                }
+                else
+                {
+                    //DISPLAY - Regular Move: Update only the piece that just moved:
+                    displayPieceAt(newCol, newRow, selectedType, selectedColour);
+
+                    //DISPLAY - Special case: If the move was enPassent, update the possible pawn locations (+/- one from the pawn that just moved
+                    if (enPassant)
+                    {
+                        displayPieceAt(enPassantPawn.PositionX,
+                                        enPassantPawn.PositionY,
+                                        chessBoard[enPassantPawn.PositionX, enPassantPawn.PositionY].Type(),
+                                        chessBoard[enPassantPawn.PositionX, enPassantPawn.PositionY].Colour);
+                    }
                 }
             }
         }

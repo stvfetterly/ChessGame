@@ -9,3 +9,14 @@ C:\Users\Steven\Documents\Visual Studio 2005\Projects\Chess\Chess\obj\Debug\Ches
 C:\Users\Steven\Documents\Visual Studio 2005\Projects\Chess\Chess\obj\Debug\Chess.Networking.NetworkingWindow.resources
 C:\Users\Steven\Documents\Visual Studio 2005\Projects\Chess\Chess\bin\Debug\Chess.exe.config
 C:\Users\Steven\Documents\Visual Studio 2005\Projects\Chess\Chess\obj\Debug\Chess.csprojResolveAssemblyReference.cache
+C:\Users\Steven\Documents\GitHub\ChessGame\Chess\bin\Debug\Chess.exe.config
+C:\Users\Steven\Documents\GitHub\ChessGame\Chess\obj\Debug\Chess.exe
+C:\Users\Steven\Documents\GitHub\ChessGame\Chess\obj\Debug\Chess.pdb
+C:\Users\Steven\Documents\GitHub\ChessGame\Chess\bin\Debug\Chess.exe
+C:\Users\Steven\Documents\GitHub\ChessGame\Chess\bin\Debug\Chess.pdb
+C:\Users\Steven\Documents\GitHub\ChessGame\Chess\obj\Debug\Chess.csprojResolveAssemblyReference.cache
+C:\Users\Steven\Documents\GitHub\ChessGame\Chess\obj\Debug\Chess.Networking.NetworkingWindow.resources
+C:\Users\Steven\Documents\GitHub\ChessGame\Chess\obj\Debug\Chess.MainChessWindow.resources
+C:\Users\Steven\Documents\GitHub\ChessGame\Chess\obj\Debug\Chess.ChessClockWindow.resources
+C:\Users\Steven\Documents\GitHub\ChessGame\Chess\obj\Debug\Chess.Properties.Resources.resources
+C:\Users\Steven\Documents\GitHub\ChessGame\Chess\obj\Debug\Chess.csproj.GenerateResource.Cache
