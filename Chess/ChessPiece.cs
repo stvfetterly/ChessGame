@@ -37,7 +37,14 @@ namespace Chess
             set { _positionY = value; }
         }
 
-        public King _king; //holds pointer to the king for this colour
+        private bool _canCastle;
+        public bool CanCastle
+        {
+            get { return _canCastle; }
+            set { _canCastle = value; }
+        }
+
+        public King _king;                  //holds reference to the king for this piece
 
         private static Pawn _doubleMove;     //variable keeps track of the last pawn to move forward two steps
         public static Pawn DblMovePawn
@@ -51,8 +58,10 @@ namespace Chess
         {
             _positionX = xPos;
             _positionY = yPos;
+            _canCastle = true;
         }
 
+        //Creates and returns a chessboard with all the pieces in the starting locations
         public static ChessPiece[,] CreateChessBoard()
         {
             ChessPiece[,] chessBoard = new ChessPiece[8, 8];
@@ -417,6 +426,52 @@ namespace Chess
             return king.isInCheck(king.PositionX, king.PositionY, chessBoardAfterMove);
         }
 
+        //Returns true if the piece is a king or rook
+        public static bool isCastling(ChessPiece firstPiece, ChessPiece secondPiece, ChessPiece[,] chessBoard)
+        {
+            bool retVal = false;
+
+            //Check that we're dealing with a King and a Rook, and that they're the same colour
+            if (((firstPiece.Type() == chessPieces.KING && secondPiece.Type() == chessPieces.ROOK) ||
+                 (secondPiece.Type() == chessPieces.KING && firstPiece.Type() == chessPieces.ROOK)) &&
+                secondPiece.Colour == firstPiece.Colour)
+            {
+                //Check that the pieces can Castle
+                if (firstPiece.CanCastle && secondPiece.CanCastle)
+                {
+                    bool emptySpace = true;
+
+                    //check that there is empty space between the king and rook
+                    int max;
+                    int min;
+                    if (firstPiece.PositionX > secondPiece.PositionX)
+                    {
+                        max = firstPiece.PositionX;
+                        min = secondPiece.PositionX;
+                    }
+                    else
+                    {
+                        max = secondPiece.PositionX;
+                        min = firstPiece.PositionX;
+                    }
+
+                    for (int i = min + 1; i < max; i++)
+                    {
+                        if (chessBoard[i, firstPiece.PositionY].Type() != chessPieces.CLEAR)
+                        {
+                            emptySpace = false;
+                        }
+                    }
+
+                    if (emptySpace)
+                    {
+                        retVal = true;
+                    }
+                }
+            }
+            return retVal;
+        }
+
         //Moves a piece from one location to another on the chess board
         public static void Move(int oldX, int oldY, int newX, int newY, ChessPiece[,] chessBoard)
         {
@@ -455,15 +510,65 @@ namespace Chess
                     }
                 }
 
-                //move the piece to the new location
-                chessBoard[newX, newY] = chessBoard[oldX, oldY];
+                //Special case - If castling, we move the pieces to a different location
+                if ( isCastling(chessBoard[oldX, oldY], chessBoard[newX, newY], chessBoard ))
+                {
+                    //Find the king and rook
+                    ChessPiece king;
+                    ChessPiece rook;
+                    if (chessBoard[oldX, oldY].Type() == chessPieces.KING)
+                    {
+                        king = chessBoard[oldX, oldY];
+                        rook = chessBoard[newX, newY];
+                    }
+                    else
+                    {
+                        rook = chessBoard[oldX, oldY];
+                        king = chessBoard[newX, newY];
+                    }
 
-                //record the new location in the piece
-                chessBoard[newX, newY].PositionX = newX;
-                chessBoard[newX, newY].PositionY = newY;
+                    //Move the king two spaces X towards the rook
+                    //Move the rook next to the king, on the opposite side
+                    if (king.PositionX < rook.PositionX)
+                    {
+                        king.PositionX = king.PositionX + 2;
+                        rook.PositionX = king.PositionX - 1;
+                    }
+                    else
+                    {
+                        king.PositionX = king.PositionX - 2;
+                        rook.PositionX = king.PositionX + 1;
+                    }
 
-                //replace the piece you moved
-                chessBoard[oldX, oldY] = new ChessPiece(oldX, oldY);
+                    //Update positions on chessboard - put pieces in new spots, clear old spots
+                    chessBoard[king.PositionX, king.PositionY] = king;
+                    chessBoard[rook.PositionX, rook.PositionY] = rook;
+                    chessBoard[oldX, oldY] = new ChessPiece(oldX, oldY);
+                    chessBoard[newX, newY] = new ChessPiece(newX, newY);
+
+                    //Once moved, the king and rook can never castle again
+                    king.CanCastle = false;
+                    rook.CanCastle = false;
+                }
+                else    // regular move takes place
+                {
+                    //move the piece to the new location
+                    chessBoard[newX, newY] = chessBoard[oldX, oldY];
+
+                    //record the new location in the piece
+                    chessBoard[newX, newY].PositionX = newX;
+                    chessBoard[newX, newY].PositionY = newY;
+
+                    //replace the piece you moved
+                    chessBoard[oldX, oldY] = new ChessPiece(oldX, oldY);
+                }
+
+                //If the king or roook have moved, they can never castle again
+                if (chessBoard[newX, newY].Type() == chessPieces.KING ||
+                    chessBoard[newX, newY].Type() == chessPieces.ROOK)
+                {
+                    chessBoard[newX, newY].CanCastle = false;
+                }
             }
         }
 
@@ -486,18 +591,26 @@ namespace Chess
         public override bool isValidMove(int finalX, int finalY, ChessPiece[,] chessBoard)
         {
             //Check that the pience has moved
-            if (hasMoved(finalX, finalY) && notAttackingFriendly(finalX, finalY, chessBoard))
+            if (hasMoved(finalX, finalY))
             {
-                //Rooks can move up/down or left/right
-                if (isMovingUpDown(finalX, finalY, chessBoard) || 
-                    isMovingLeftRight(finalX, finalY, chessBoard)  )
+                if (notAttackingFriendly(finalX, finalY, chessBoard))
                 {
-                    //Check if the move places the king in check
-                    if ( !isKingInCheckAfterMove(_king, finalX, finalY, chessBoard) )
+                    //Rooks can move up/down or left/right
+                    if (isMovingUpDown(finalX, finalY, chessBoard) || 
+                        isMovingLeftRight(finalX, finalY, chessBoard)  )
                     {
-                        //safe to move!
-                        return true;
+                        //Check if the move places the king in check
+                        if ( !isKingInCheckAfterMove(_king, finalX, finalY, chessBoard) )
+                        {
+                            //safe to move!
+                            return true;
+                        }
                     }
+                }
+                //Check if the rook is castling
+                else if (isCastling(chessBoard[PositionX, PositionY], chessBoard[finalX, finalY], chessBoard))
+                {
+                    return true;
                 }
             }
             return false;
@@ -513,6 +626,7 @@ namespace Chess
         {
             Rook returnPiece = new Rook(PositionX, PositionY);
             returnPiece.Colour = Colour;
+            returnPiece.CanCastle = CanCastle;
             return returnPiece;
         }
     }
@@ -606,15 +720,23 @@ namespace Chess
         public override bool isValidMove(int finalX, int finalY, ChessPiece[,] chessBoard)
         {
             //Check that the piece has moved
-            if (hasMoved(finalX, finalY) && notAttackingFriendly(finalX, finalY, chessBoard))
+            if (hasMoved(finalX, finalY))
             {
-                //Special case - since we are moving the king, the king position is changing.  We must 
-                //create a new king and pass his future position to the check function
-                King newKing = new King(finalX, finalY);
-                newKing.Colour = _king.Colour;
+                if ( notAttackingFriendly(finalX, finalY, chessBoard) )
+                {
+                    //Special case - since we are moving the king, the king position is changing.  We must 
+                    //create a new king and pass his future position to the check function
+                    King newKing = new King(finalX, finalY);
+                    newKing.Colour = _king.Colour;
 
-                //King can move a single spot in any direction, but not into check
-                if (isMovingSingle(finalX, finalY) && !isKingInCheckAfterMove(newKing, finalX, finalY, chessBoard))
+                    //King can move a single spot in any direction, but not into check
+                    if (isMovingSingle(finalX, finalY) && !isKingInCheckAfterMove(newKing, finalX, finalY, chessBoard))
+                    {
+                        return true;
+                    }
+                }
+                //Check if the rook is castling
+                else if (isCastling(chessBoard[PositionX, PositionY], chessBoard[finalX, finalY], chessBoard))
                 {
                     return true;
                 }
@@ -848,11 +970,14 @@ namespace Chess
             return chessPieces.KING;
         }
 
+        
+
         //Used for creating a duplicate object
         public override ChessPiece Clone()
         {
             King returnPiece = new King(PositionX, PositionY);
             returnPiece.Colour = Colour;
+            returnPiece.CanCastle = CanCastle;
             return returnPiece;
         }
     }
