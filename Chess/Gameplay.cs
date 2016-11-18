@@ -2,33 +2,25 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Timers;
+using System.Diagnostics;
 
 namespace Chess
 {
-    class Gameplay
+    public class Gameplay
     {
         //variable declarations and accessor methods
         private chessColour _turn;
         public chessColour Turn
         {
             get { return _turn; }
-            set { _turn = value;}
+            set 
+            { 
+                _turn = value;
+            }
         }
 
-        private Timer _chessTimer = new Timer();
-
-        private int _whiteTime = 0;
-        public int WhiteTime
-        {
-            get { return _whiteTime; }
-            set { _whiteTime = value;}
-        }
-        private int _blackTime = 0;
-        public int BlackTime
-        {
-            get { return _blackTime; }
-            set { _blackTime = value;}
-        }
+        private Stopwatch _blackSW = new Stopwatch();
+        private Stopwatch _whiteSW = new Stopwatch();
 
         //constructor
         public Gameplay()
@@ -39,11 +31,6 @@ namespace Chess
         public void reset()
         {
             _turn = chessColour.WHITE;      //Default player is white
-            _chessTimer.Interval = 1000;    //Ticks every second
-            _chessTimer.Start();
-            _chessTimer.Elapsed += new ElapsedEventHandler(chessTick);
-            _whiteTime = 0;
-            _blackTime = 0;
         }
 
         //Handles the ending of the current player's turn
@@ -51,25 +38,32 @@ namespace Chess
         {
             if (_turn == chessColour.BLACK)
             {
+                _blackSW.Stop();
                 _turn = chessColour.WHITE;
+                _whiteSW.Start();
             }
             else
             {
+                _whiteSW.Stop();
                 _turn = chessColour.BLACK;
+                _blackSW.Start();
             }
         }
 
-        //Called by chess timer every second
-        private void chessTick(object source, ElapsedEventArgs e)
+        public string getTime(chessColour colour)
         {
-             if (_turn == chessColour.BLACK)
+            TimeSpan ts;
+            if (colour == chessColour.BLACK)
             {
-                _blackTime += 1;
+                ts = _blackSW.Elapsed;
             }
             else
             {
-                _whiteTime += 1;
+                ts = _whiteSW.Elapsed;
             }
+
+            String retVal = String.Format("{0:00}:{1:00}:{2:00}",ts.Hours, ts.Minutes, ts.Seconds);
+            return retVal;
         }
     }
 }
