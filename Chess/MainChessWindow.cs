@@ -51,7 +51,7 @@ namespace Chess
         private ChessPiece[,] chessBoard;
 
         //gameplay declarations
-        Gameplay currentGame = new Gameplay();
+        public Gameplay currentGame = new Gameplay();
 
         public MainChessWindow()
         {
@@ -196,6 +196,7 @@ namespace Chess
 
                 //move the piece
                 ChessPiece.Move(oldCol, oldRow, newCol, newRow, chessBoard);
+                selectedType = chessBoard[newCol, newRow].Type();               //type may have changed (pawn->queen), so update
 
                 //Every time a valid move is made, switch turns
                 currentGame.changeTurns();
@@ -257,7 +258,7 @@ namespace Chess
             //if the clock hasn't been created yet, create it
             if (null == _gameClock)
             {
-                _gameClock = new ChessClockWindow();
+                _gameClock = new ChessClockWindow(this);
                 _gameClock.FormBorderStyle = FormBorderStyle.FixedDialog;
             }
 

@@ -494,8 +494,10 @@ namespace Chess
                          (pieceColor == chessColour.WHITE && newY == MAX_CHESS_VALUE)   )
                     {
                         //replace the pawn with a queen
+                        King oldKing = chessBoard[oldX, oldY]._king;
                         chessBoard[oldX, oldY] = new Queen(oldX, oldY);
                         chessBoard[oldX, oldY].Colour = pieceColor;
+                        chessBoard[oldX, oldY]._king = oldKing;
                     }
 
                     //Whenever a pawn moves two spaces, we record this for processing later
