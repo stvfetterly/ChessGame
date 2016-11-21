@@ -6,6 +6,7 @@ using System.Diagnostics;
 
 namespace Chess
 {
+    [Serializable]
     public class Gameplay
     {
         //variable declarations and accessor methods
@@ -19,7 +20,10 @@ namespace Chess
             }
         }
 
+        [NonSerialized]
         private Stopwatch _blackSW = new Stopwatch();
+
+        [NonSerialized]
         private Stopwatch _whiteSW = new Stopwatch();
 
         //constructor
