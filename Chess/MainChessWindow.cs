@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -6,6 +7,9 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Chess.Networking;
+//using System.Xml.Serialization;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Chess
 {    
@@ -228,7 +232,7 @@ namespace Chess
         }
 
 
-//TOOL MENU ITEMS-------------------------------------------------------------------
+//MENU ITEMS-------------------------------------------------------------------
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
@@ -314,7 +318,90 @@ namespace Chess
                 playAsBlackToolStripMenuItem.Checked = false;
             }
         }
- //END OF TOOL MENU ITEMS-------------------------------------------------------------
+
+        //Save current game
+        private void saveGameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Create object to hold all important gameplay data and initialize correct values
+            ChessData saveData = new ChessData();
+            saveData.chessBoard = chessBoard;
+            saveData.currentGame = currentGame;
+            saveData.firstPlayerColour = firstPlayerColour;
+
+
+
+            Stream saveStream;
+
+            //Create save file dialog
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.Filter = "chs files (*.chs)|*.chs|All files (*.*)|*.*";
+            saveFileDialog1.FilterIndex = 1;        //default to saving .chs files
+            saveFileDialog1.RestoreDirectory = true;
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if ((saveStream = saveFileDialog1.OpenFile()) != null)
+                {
+                    // Serialize chessboard
+                    IFormatter formatter = new BinaryFormatter();
+                    try
+                    {
+                        formatter.Serialize(saveStream, saveData);
+                    }
+                    catch (Exception ex)
+                    {
+                        //TODO: handle possible errors from serialization here
+                    }
+
+                    saveStream.Close();       //Close the file so we can write to it
+                }
+            }
+        }
+
+        //Load a saved game
+        private void loadGameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //Create object to read in all gameplay data
+            ChessData loadData = new ChessData();
+
+            Stream loadStream = null;
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+            openFileDialog1.Filter = "chs files (*.chs)|*.chs|All files (*.*)|*.*";
+            openFileDialog1.FilterIndex = 1;        //default to loading .chs files
+            openFileDialog1.RestoreDirectory = true;
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    if ((loadStream = openFileDialog1.OpenFile()) != null)
+                    {
+                        using (loadStream)
+                        {
+                            // Deserialize data from file:
+                            IFormatter formatter = new BinaryFormatter();
+                            loadData = (ChessData)formatter.Deserialize(loadStream);
+
+                            //load the all the gameplay data
+                            chessBoard = loadData.chessBoard;
+                            currentGame = loadData.currentGame;
+                            firstPlayerColour = loadData.firstPlayerColour;
+
+                            //Update chessboard display with new data
+                            updateDisplay();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
+                }
+            }
+        }
+
+ //END OF MENU ITEMS-------------------------------------------------------------
 
 //DISPLAY FUNCTIONS---------------------------------------------------------------
 
@@ -624,4 +711,14 @@ namespace Chess
         public int intY { get; set; }
     }
  //END OF CUSTOM EVENTS-----------------------------------------------------------------
+
+    //Used for serialization saving/loading
+    [Serializable]
+    public class ChessData
+    {
+        public Gameplay currentGame;
+        public ChessPiece[,] chessBoard;
+
+        public chessColour firstPlayerColour;
+    }
 }

@@ -1,19 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace Chess
 {
-    class ChessPiece
+    [Serializable]
+    public class ChessPiece
     {
-        //variable declarations
-        private chessColour _colour;
-        public chessColour Colour
-        {
-            get { return _colour; }
-            set { _colour = value; }
-        }
-
         public const int MAX_CHESS_VALUE = 7;
         public const int MIN_CHESS_VALUE = 0;
         public const int WHT_PAWN_START = MIN_CHESS_VALUE + 1;
@@ -46,11 +40,28 @@ namespace Chess
 
         public King _king;                  //holds reference to the king for this piece
 
+        //variable declarations
+        private chessColour _colour;
+        public chessColour Colour
+        {
+            get { return _colour; }
+            set { _colour = value; }
+        }
+
         private static Pawn _doubleMove;     //variable keeps track of the last pawn to move forward two steps
         public static Pawn DblMovePawn
         {
             get { return _doubleMove; }
             set { _doubleMove = value; }
+        }
+
+        //parameterless constructor - required for serialization
+        public ChessPiece ()
+        {
+            _positionX = 0;
+            _positionY = 0;
+            _canCastle = true;
+            _colour = chessColour.BLACK;
         }
 
         //constructor
@@ -59,6 +70,7 @@ namespace Chess
             _positionX = xPos;
             _positionY = yPos;
             _canCastle = true;
+            _colour = chessColour.BLACK;
         }
 
         //Creates and returns a chessboard with all the pieces in the starting locations
@@ -583,9 +595,13 @@ namespace Chess
         }
     }
 
-    class Rook : ChessPiece
+    [Serializable]
+    public class Rook : ChessPiece
     {
-        //constructor
+        //constructors
+        public Rook(): base()
+        {
+        }
         public Rook (int xPos, int yPos) : base (xPos, yPos)
         {
         }
@@ -633,9 +649,13 @@ namespace Chess
         }
     }
 
-    class Queen : ChessPiece
+    [Serializable]
+    public class Queen : ChessPiece
     {
-        //constructor passes parameters for the chess piece constructor
+        //constructors
+        public Queen(): base()
+        {
+        }
         public Queen (int xPos, int yPos) : base (xPos, yPos)
         {
         }
@@ -675,9 +695,13 @@ namespace Chess
         }
     }
 
-    class Pawn : ChessPiece
+    [Serializable]
+    public class Pawn : ChessPiece
     {
-        //constructor passes parameters for the chess piece constructor
+        //constructors
+        public Pawn(): base()
+        {
+        }
         public Pawn (int xPos, int yPos) : base (xPos, yPos)
         {
         }
@@ -711,9 +735,13 @@ namespace Chess
         }
     }
 
-    class King : ChessPiece
+    [Serializable]
+    public class King : ChessPiece
     {
-        //constructor passes parameters for the chess piece constructor
+        //constructors
+        public King(): base()
+        {
+        }
         public King (int xPos, int yPos) : base (xPos, yPos)
         {
 
@@ -984,9 +1012,13 @@ namespace Chess
         }
     }
 
-    class Knight : ChessPiece
+    [Serializable]
+    public class Knight : ChessPiece
     {
-        //constructor passes parameters for the chess piece constructor
+        //constructors
+        public Knight(): base()
+        {
+        }
         public Knight (int xPos, int yPos) : base (xPos, yPos)
         {
         }
@@ -1024,9 +1056,13 @@ namespace Chess
         }
     }
 
-    class Bishop : ChessPiece
+    [Serializable]
+    public class Bishop : ChessPiece
     {
-        //constructor passes parameters for the chess piece constructor
+        //constructors
+        public Bishop(): base()
+        {
+        }
         public Bishop (int xPos, int yPos) : base (xPos, yPos)
         {
             //Bishop can only move in diagonals

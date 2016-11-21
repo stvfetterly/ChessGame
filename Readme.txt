@@ -17,10 +17,6 @@ MainChessWindow.cs - Displays the chessboard/pieces, takes user click events whi
 
 
 TODO:
-- Implement castling
-- Complete implementation of the timing clock
-- Save chessboard
-- Load chessboard
 - User selectable move display (for future debugging), currently all commands sent are logged and displayed
 - Error logging for future debugging
 
